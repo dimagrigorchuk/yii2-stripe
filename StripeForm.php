@@ -112,6 +112,12 @@ class StripeForm extends \yii\widgets\ActiveForm {
      * @var JsExpression|string
      */
     public $brandIdentificationHandler;
+
+    /**
+     * Used if there are more text inputs than just the payment inputs
+     * @var bool
+     */
+    public $continueValidationIfFailed = false;
     
     //Stripe constants
     const NUMBER_ID = 'number';
@@ -243,6 +249,10 @@ class StripeForm extends \yii\widgets\ActiveForm {
                         var validExpiry = $.payment.validateCardExpiry($month.val(), $year.val());
                         $month.toggleInputError(!validExpiry);
                         $year.toggleInputError(!validExpiry);
+                    }
+                    
+                    if (' . $this->continueValidationIfFailed . ') {
+                        return true;
                     }
 
                     if(!validCard || !validCVC || !validExpiry){
